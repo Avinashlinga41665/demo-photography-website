@@ -235,7 +235,9 @@ export default function PricesSection() {
                     <button className="bg-[white] text-black px-6 py-2 rounded-lg shadow">
                       Pay
                     </button>
-                    <button className="bg-[white] text-black px-6 py-2 rounded-lg shadow">
+                    <button 
+                    onClick={() => (window.location.href = "mailto:yourmail@gmail.com")}
+                    className="bg-[white] text-black px-6 py-2 rounded-lg shadow">
                       ✉️
                     </button>
                   </div>
@@ -302,10 +304,14 @@ export default function PricesSection() {
             <button className="bg-[white] text-black py-3 rounded-lg shadow-lg">
               Pay
             </button>
-            <button className="bg-[white] text-black py-3 rounded-lg shadow-lg">
+            <button 
+            onClick={() => (window.location.href = "mailto:yourmail@gmail.com")}
+            className="bg-[white] text-black py-3 rounded-lg shadow-lg">
               ✉️
             </button>
-            <button className="bg-[white] text-black py-3 rounded-lg shadow-lg">
+            <button 
+            onClick={() => (window.location.href = "tel:+919876543210")}
+            className="bg-[white] text-black py-3 rounded-lg shadow-lg">
               📞
             </button>
           </div>

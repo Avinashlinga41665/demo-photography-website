@@ -88,7 +88,7 @@ export default function PricesSection() {
           name: "PACKAGE I",
           price: `₹${p.price}`,
           details: [
-            `${p.Editphotonumber} edited photos`, // <-- dynamic
+            `${p.editphotonumber} edited photos`, // <-- dynamic
             "45-minute session",
             "Professional lighting & exposure",
             "Teeth whitening included",

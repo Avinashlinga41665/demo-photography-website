@@ -79,10 +79,10 @@ export default function PricesSection() {
       title: p.title,
       price: p.price,
       images: [
-        p.photo1 || "/default.jpg",
-        p.photo2 || "/default.jpg",
-        p.photo3 || "/default.jpg",
-      ],
+  p.photo1?.url || "/default.jpg",
+  p.photo2?.url || "/default.jpg",
+  p.photo3?.url || "/default.jpg",
+],
       items: [
         {
           name: "PACKAGE I",

@@ -1,13 +1,12 @@
 export const GET_PRICES = `
-  query {
-    pricePackages {
-      id
-      title
-      price
-      Editphotonumber
-      photo1
-      photo2
-      photo3
-    }
+  query GetPrices {
+  pricePackages {
+    id
+    title
+    price
+    editphotonumber
+    photo1 { url }
+    photo2 { url }
+    photo3 { url }
   }
-`;
+};

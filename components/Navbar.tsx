@@ -104,12 +104,16 @@ export default function Navbar({ active, setActive }: NavbarProps) {
 
             {/* MOBILE CALL TO ACTION BUTTONS */}
             <div className="mt-10 flex flex-col gap-3">
-              <button className="bg-[#719BAE] text-white py-2 rounded-lg shadow">
-                Email Me
-              </button>
-              <button className="bg-[#719BAE] text-white py-2 rounded-lg shadow">
-                Call Me
-              </button>
+              <button
+          onClick={() => (window.location.href = "mailto:yourmail@gmail.com")}
+          className="col-span-2 bg-[white] text-white px-5 py-3 rounded-lg hover:bg-[transparent] after:content-['✉️']" 
+        >
+        </button>
+        <button
+          onClick={() => (window.location.href = "tel:+919876543210")}
+          className="col-span-2 bg-[white] text-white px-5 py-3 rounded-lg hover:bg-[transparent] after:content-['📞'] "
+        >
+        </button>
             </div>
           </div>
         </div>

@@ -1,12 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
-/* ---------------------------------------
-   FADE-IN ON SCROLL (same as About & Prices)
------------------------------------------ */
+/* Fade Animation */
 function FadeInSection({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [visible, setVisible] = useState(false);
@@ -14,20 +12,18 @@ function FadeInSection({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!ref.current) return;
 
-    const observer = new IntersectionObserver(
+    const obs = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            observer.disconnect();
-          }
-        });
+        if (entries[0].isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
       },
       { threshold: 0.15 }
     );
 
-    observer.observe(ref.current);
-    return () => observer.disconnect();
+    obs.observe(ref.current);
+    return () => obs.disconnect();
   }, []);
 
   return (
@@ -42,77 +38,81 @@ function FadeInSection({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ---------------------------------------
-   DATA
------------------------------------------ */
-type Category =
-  | "Wedding"
-  | "Kids"
-  | "Maternity"
-  | "PreWedding"
-  | "Model"
-  | "Events";
-
-const placeholder = "/default.jpg";
-
-const portfolioData: Record<Category, { images: string[]; desc: string }> = {
-  Wedding: {
-    images: [placeholder, placeholder, placeholder],
-    desc: "Timeless, emotional, and cinematic wedding photography capturing rituals, smiles, and candid moments.",
-  },
-
-  Kids: {
-    images: [placeholder, placeholder, placeholder],
-    desc: "Joyful and innocent moments captured through playful and natural kids photography sessions.",
-  },
-
-  Maternity: {
-    images: [placeholder, placeholder, placeholder],
-    desc: "Elegant and emotional maternity portraits celebrating the beauty of motherhood.",
-  },
-
-  PreWedding: {
-    images: [placeholder, placeholder, placeholder],
-    desc: "Romantic and cinematic pre-wedding shoots capturing your love story with creativity.",
-  },
-
-  Model: {
-    images: [placeholder, placeholder, placeholder],
-    desc: "Professional studio and outdoor model portfolio shoots crafted for aspiring and professional models.",
-  },
-
-  Events: {
-    images: [placeholder, placeholder, placeholder],
-    desc: "Candid and emotional event photography—all your special celebrations beautifully preserved.",
-  },
-};
-
-/* ---------------------------------------
-   MAIN COMPONENT
------------------------------------------ */
 export default function PortfolioSection() {
-  const categories: Category[] = [
-    "Wedding",
-    "Kids",
-    "Maternity",
-    "PreWedding",
-    "Model",
-    "Events",
-  ];
-
-  const [activeCategory, setActiveCategory] =
-    useState<Category>("Wedding");
-
+  const [categories, setCategories] = useState<any[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedImg, setSelectedImg] = useState(0);
 
-  const current = portfolioData[activeCategory];
+  // ---- Load Data ----
+  useEffect(() => {
+    async function loadPortfolio() {
+      const res = await fetch("/api/portfolio");
+      const data = await res.json();
+
+      if (!Array.isArray(data) || data.length === 0) {
+        // SET DEFAULT PORTFOLIO CATEGORY
+        setCategories([
+          {
+            id: "default",
+            title: "Wedding",
+            description:
+              "Beautiful wedding moments captured with elegance and emotion.",
+            images: [
+              { url: "/default.jpg" },
+              { url: "/default.jpg" },
+              { url: "/default.jpg" },
+            ],
+          },
+          {
+            id: "default2",
+            title: "Kids",
+            description:
+              "Fun and joyful kids photography that captures innocence.",
+            images: [
+              { url: "/default.jpg" },
+              { url: "/default.jpg" },
+              { url: "/default.jpg" },
+            ],
+          },
+        ]);
+      } else {
+        // CLEAN DATA WITH DEFAULT FALLBACKS
+        const final = data.map((item: any) => ({
+          id: item.id,
+          title: item.title || "Untitled Category",
+          description:
+            item.description || "No description added for this category yet.",
+          images:
+            item.images?.length > 0
+              ? item.images.map((i: any) => ({
+                  url: i?.url || "/default.jpg",
+                }))
+              : [
+                  { url: "/default.jpg" },
+                  { url: "/default.jpg" },
+                  { url: "/default.jpg" },
+                ],
+        }));
+
+        setCategories(final);
+      }
+    }
+
+    loadPortfolio();
+  }, []);
+
+  if (categories.length === 0) {
+    return <p className="text-center p-10">Loading portfolio...</p>;
+  }
+
+  const current = categories[activeIndex];
 
   return (
     <div className="bg-gradient-to-b from-white via-[#f8f6f2] to-[#f5f1e8] py-20 px-4">
       <div className="max-w-6xl mx-auto space-y-14">
-
-        {/* ------------------ HEADING ------------------ */}
+        
+        {/* Heading */}
         <FadeInSection>
           <h2 className="text-4xl md:text-5xl font-bold text-[#223344] text-center">
             Portfolio
@@ -120,38 +120,37 @@ export default function PortfolioSection() {
           <div className="w-20 h-[3px] bg-[#719BAE] mx-auto rounded-full mt-3 mb-6" />
         </FadeInSection>
 
-        {/* ------------------ FILTERS ------------------ */}
+        {/* Filters */}
         <FadeInSection>
           <div className="flex flex-wrap gap-4 justify-center">
-            {categories.map((cat) => (
+            {categories.map((cat, idx) => (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
+                key={cat.id}
+                onClick={() => setActiveIndex(idx)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold border transition ${
-                  activeCategory === cat
+                  activeIndex === idx
                     ? "bg-black text-white border-black"
                     : "bg-white text-black border-gray-400"
                 }`}
               >
-                {cat.replace("PreWedding", "Pre-Wedding")}
+                {cat.title}
               </button>
             ))}
           </div>
 
-          {/* DESCRIPTION */}
           <p className="text-center text-gray-700 mt-6 max-w-xl mx-auto">
-            {current.desc}
+            {current.description}
           </p>
         </FadeInSection>
 
-        {/* ------------------ IMAGES (MASONRY) ------------------ */}
+        {/* Masonry Images */}
         <FadeInSection>
           <div className="columns-1 sm:columns-2 md:columns-3 gap-4">
-            {current.images.map((img, idx) => (
+            {current.images.map((img: any, idx: number) => (
               <img
                 key={idx}
-                src={img}
-                alt={activeCategory}
+                src={img.url}
+                alt={current.title}
                 onClick={() => {
                   setSelectedImg(idx);
                   setLightboxOpen(true);
@@ -162,13 +161,13 @@ export default function PortfolioSection() {
           </div>
         </FadeInSection>
 
-        {/* ------------------ LIGHTBOX ------------------ */}
+        {/* Lightbox */}
         {lightboxOpen && (
           <Lightbox
             open={lightboxOpen}
             close={() => setLightboxOpen(false)}
             index={selectedImg}
-            slides={current.images.map((src) => ({ src }))}
+            slides={current.images.map((img: any) => ({ src: img.url }))}
           />
         )}
       </div>

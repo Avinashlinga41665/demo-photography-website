@@ -1,3 +1,4 @@
+// /lib/queries/prices.ts
 export const GET_PRICES = `
   query GetPrices {
     pricePackages {
@@ -5,14 +6,13 @@ export const GET_PRICES = `
       title
       price
       editphotonumber
-
       photo1 {
         url
       }
-      photo2 {
+        photo2 {
         url
-      }
-      photo3 {
+      } 
+        photo3 {
         url
       }
     }

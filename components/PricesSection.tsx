@@ -81,7 +81,7 @@ export default function PricesSection() {
       images: [
   p.photo1?.url || "/default.jpg",
   p.photo2?.url || "/default.jpg",
-  p.photo3?.url || "/default.jpg",
+  p.photo3?.url || "/default.jpg"
 ],
       items: [
         {

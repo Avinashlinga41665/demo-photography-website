@@ -21,6 +21,10 @@ const geistMono = Roboto_Mono({
 export const metadata: Metadata = {
   title: "Photography website",
   description: "Created by Avinash",
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

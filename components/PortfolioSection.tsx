@@ -109,7 +109,7 @@ export default function PortfolioSection() {
   const current = categories[activeIndex];
 
   return (
-    <div className="bg-gradient-to-b from-white via-[#f8f6f2] to-[#f5f1e8] py-20 px-4">
+    <div className="bg-gradient-to-b from-white via-[#f8f6f2] to-[#f5f1e8] pb-14">
       <div className="max-w-6xl mx-auto space-y-14">
         
         {/* Heading */}

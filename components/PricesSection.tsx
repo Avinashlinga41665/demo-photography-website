@@ -49,6 +49,7 @@ type PackageType = {
   items: PackageItem[];
 };
 
+
 export default function PricesSection() {
   const [packages, setPackages] = useState<any[]>([]);
   const [merged, setMerged] = useState<PackageType[]>([]);
@@ -59,6 +60,24 @@ export default function PricesSection() {
 
   const [dragY, setDragY] = useState(0);
   const startYRef = useRef(0);
+    const [showQR, setShowQR] = useState(false);
+
+const upiLink =
+  "upi://pay?pa=9640268968@ybl&pn=Avinash%20Photography&am=2000&cu=INR&tn=Photoshoot%20Booking%20Advance";
+
+const handlePay = () => {
+  if (typeof window === "undefined") return;
+
+  const isAndroid = /Android/i.test(navigator.userAgent);
+
+  if (isAndroid) {
+    window.location.href = upiLink;
+
+  } else {
+    setShowQR(true);
+  }
+};
+
 
   /* Load prices from API */
   useEffect(() => {
@@ -232,9 +251,13 @@ export default function PricesSection() {
 
                   {/* DESKTOP BUTTONS */}
                   <div className="mt-6 flex justify-center gap-4">
-                    <button className="bg-[white] text-black px-6 py-2 rounded-lg shadow">
-                      Pay
-                    </button>
+                    <button
+  onClick={handlePay}
+  className="bg-white text-black px-6 py-2 rounded-lg shadow"
+>
+  Pay
+</button>
+
                     <button 
                     onClick={() => (window.location.href = "mailto:yourmail@gmail.com")}
                     className="bg-[white] text-black px-6 py-2 rounded-lg shadow">
@@ -301,9 +324,13 @@ export default function PricesSection() {
 
           {/* MOBILE BUTTONS */}
           <div className="px-5 pb-6 flex flex-col gap-3 mt-4">
-            <button className="bg-[white] text-black py-3 rounded-lg shadow-lg">
-              Pay
-            </button>
+            <button
+  onClick={handlePay}
+  className="bg-white text-black py-3 rounded-lg shadow-lg"
+>
+  Pay
+</button>
+
             <button 
             onClick={() => (window.location.href = "mailto:yourmail@gmail.com")}
             className="bg-[white] text-black py-3 rounded-lg shadow-lg">
@@ -315,8 +342,36 @@ export default function PricesSection() {
               📞
             </button>
           </div>
+          
+
         </div>
       )}
+      {showQR && (
+  <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999]">
+    <div className="bg-white p-6 rounded-xl shadow-xl max-w-sm w-full text-center">
+      <h3 className="text-xl font-bold mb-3">Pay via UPI</h3>
+
+      <img
+        src="/default.jpg"
+        alt="UPI QR Code"
+        className="mx-auto w-56 h-56 object-contain mb-4"
+      />
+
+      <p className="text-sm text-gray-600 mb-4">
+        Scan using Google Pay / PhonePe
+      </p>
+
+      <button
+        onClick={() => setShowQR(false)}
+        className="w-full bg-[#719BAE] text-white py-2 rounded-lg hover:bg-[#5a7f8d]"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
     </>
+    
   );
 }

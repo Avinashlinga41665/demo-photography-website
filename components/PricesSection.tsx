@@ -62,21 +62,22 @@ export default function PricesSection() {
   const startYRef = useRef(0);
     const [showQR, setShowQR] = useState(false);
 
-const upiLink =
-  "upi://pay?pa=9640268968@ybl&pn=Avinash%20Photography&am=2000&cu=INR&tn=Photoshoot%20Booking%20Advance";
+const generateUpiLink = (amount: string) =>
+  `upi://pay?pa=9640268968@ybl&pn=Avinash%20Photography&am=${amount}&cu=INR&tn=Photoshoot%20Booking%20Advance`;
 
-const handlePay = () => {
+const handlePay = (price: string) => {
   if (typeof window === "undefined") return;
 
+  const upiLink = generateUpiLink(price);
   const isAndroid = /Android/i.test(navigator.userAgent);
 
   if (isAndroid) {
     window.location.href = upiLink;
-
   } else {
     setShowQR(true);
   }
 };
+
 
 
   /* Load prices from API */
@@ -251,8 +252,8 @@ const handlePay = () => {
 
                   {/* DESKTOP BUTTONS */}
                   <div className="mt-6 flex justify-center gap-4">
-                    <button
-  onClick={handlePay}
+  <button
+  onClick={() => handlePay(pkg.price)}
   className="bg-white text-black px-6 py-2 rounded-lg shadow"
 >
   Pay
@@ -325,7 +326,7 @@ const handlePay = () => {
           {/* MOBILE BUTTONS */}
           <div className="px-5 pb-6 flex flex-col gap-3 mt-4">
             <button
-  onClick={handlePay}
+  onClick={() => handlePay(pkg.price)}
   className="bg-white text-black py-3 rounded-lg shadow-lg"
 >
   Pay

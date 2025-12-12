@@ -376,7 +376,7 @@ const handlePay = (price: string) => {
           {/* MOBILE BUTTONS */}
           <div className="px-5 pb-6 flex flex-col gap-3 mt-4">
             <button
-  onClick={() => handlePay(pkg.price)}
+  onClick={() => handlePay(sheetData.price)}
   className="bg-white text-black py-3 rounded-lg shadow-lg"
 >
   Pay

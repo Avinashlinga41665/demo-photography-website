@@ -2,7 +2,59 @@
 
 import { useEffect, useRef, useState, ReactNode } from "react";
 
-/* Fade Animation */
+/* -------------------------------------------------------
+   PHOTO LOADING SCREEN (Spinner + Rotating Messages)
+-------------------------------------------------------- */
+function PhotoLoader() {
+  const messages = [
+    "Capturing light, one moment at a time…",
+    "Framing your story…",
+    "Setting up the perfect shot…",
+    "Bringing your moments to life…",
+    "Crafting your visual experience…",
+  ];
+
+   const icons = ["📸", "🎞️", "📷", "🎥"]; // cycling icons
+  const [msgIndex, setMsgIndex] = useState(0);
+  const [iconIndex, setIconIndex] = useState(0);
+
+  useEffect(() => {
+    const msgTimer = setInterval(() => {
+      setMsgIndex((prev) => (prev + 1) % messages.length);
+    }, 1500);
+
+    const iconTimer = setInterval(() => {
+      setIconIndex((prev) => (prev + 1) % icons.length);
+    }, 900); // faster icon animation
+
+    return () => {
+      clearInterval(msgTimer);
+      clearInterval(iconTimer);
+    };
+  }, []);
+
+  return (
+    <div className="flex flex-col items-center justify-center py-28 space-y-6">
+
+      {/* Icon Animation */}
+      <div
+        key={iconIndex} // force re-animation each change
+        className="text-6xl transition-all duration-500 transform animate-bounce"
+      >
+        {icons[iconIndex]}
+      </div>
+
+      {/* Rotating Quotes */}
+      <p className="text-lg text-gray-700 font-medium transition-opacity duration-500">
+        {messages[msgIndex]}
+      </p>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------
+   FADE-IN ANIMATION
+-------------------------------------------------------- */
 function FadeInSection({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [visible, setVisible] = useState(false);
@@ -36,6 +88,9 @@ function FadeInSection({ children }: { children: ReactNode }) {
   );
 }
 
+/* -------------------------------------------------------
+   MAIN ABOUT SECTION
+-------------------------------------------------------- */
 export default function AboutSection() {
   const [about, setAbout] = useState<any | null>(null);
 
@@ -48,13 +103,14 @@ export default function AboutSection() {
     loadAbout();
   }, []);
 
-  if (!about)
-    return <p className="text-center py-20 text-xl">Loading About Section...</p>;
+  /* ----------- SHOW PHOTO LOADER UNTIL DATA ARRIVES ---------- */
+  if (!about) return <PhotoLoader />;
 
-const galleryImages =
-  about.images?.length
-    ? about.images.map((p: any) => p?.url || "/default.jpg")
-    : Array(6).fill("/default.jpg"); 
+  /* ---- GALLERY IMAGES ---- */
+  const galleryImages =
+    about.images?.length
+      ? about.images.map((p: any) => p?.url || "/default.jpg")
+      : Array(6).fill("/default.jpg");
 
   return (
     <div className="bg-gradient-to-b from-white via-[#f8f6f2] to-[#f5f1e8] pb-14">
@@ -90,7 +146,7 @@ const galleryImages =
         {/* Intro + Profile Card */}
         <FadeInSection>
           <div className="grid md:grid-cols-[2fr,1.3fr] gap-10 items-center mt-4">
-
+            
             {/* Text Block */}
             <div className="text-left space-y-4">
               <h3 className="text-2xl md:text-3xl font-bold text-gray-800">

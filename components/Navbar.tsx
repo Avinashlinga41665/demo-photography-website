@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 
 type NavbarProps = {
   active: string;
@@ -23,15 +22,16 @@ export default function Navbar({ active, setActive }: NavbarProps) {
       {/* TOP NAVBAR */}
       <nav className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md shadow-sm">
         <div className="max-w-6xl mx-auto flex items-center justify-between px-4 py-4">
-              <img
-                src="/logo.png"
-                className="w-32 h-20 rounded-full object-cover shadow-md"
-              />
-          {/* BRAND */}
-          <h1 className="text-2xl font-bold tracking-wide text-[#223344]">
-            AVINASH PHOTOGRAPHY
-          </h1>
+             <button onClick={() => setActive("HomePage")} className="flex items-center gap-3">
+  <img
+    src="/logo.png"
+    className="w-32 h-20 rounded-full object-cover shadow-md"
+  />
 
+  <h1 className="text-2xl font-bold tracking-wide text-[#223344] hover:text-[#719BAE] transition">
+    AVINASH PHOTOGRAPHY
+  </h1>
+</button>
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-10 text-lg">
             {navItems.map((item) => (

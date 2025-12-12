@@ -37,6 +37,56 @@ function FadeInSection({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+/* ----------------------------------------------------
+   MULTI-ICON PORTFOLIO LOADER
+---------------------------------------------------- */
+function PortfolioLoader() {
+  const messages = [
+    "Loading your beautiful memories…",
+    "Curating your photography collection…",
+    "Framing stunning visuals…",
+    "Organizing your portfolio…",
+    "Preparing your gallery…",
+  ];
+
+  const icons = ["📸", "🎞️", "📷", "🎥"];
+  const [msgIndex, setMsgIndex] = useState(0);
+  const [iconIndex, setIconIndex] = useState(0);
+
+  useEffect(() => {
+    const msgTimer = setInterval(() => {
+      setMsgIndex((prev) => (prev + 1) % messages.length);
+    }, 1500);
+
+    const iconTimer = setInterval(() => {
+      setIconIndex((prev) => (prev + 1) % icons.length);
+    }, 900);
+
+    return () => {
+      clearInterval(msgTimer);
+      clearInterval(iconTimer);
+    };
+  }, []);
+
+  return (
+    <div className="flex flex-col items-center justify-center py-32 space-y-6">
+
+      {/* Animated rotating icons */}
+      <div
+        key={iconIndex}
+        className="text-6xl transition-all duration-500 transform animate-bounce"
+      >
+        {icons[iconIndex]}
+      </div>
+
+      {/* Rotating loader messages */}
+      <p className="text-lg text-gray-700 font-medium transition-opacity duration-500">
+        {messages[msgIndex]}
+      </p>
+    </div>
+  );
+}
+
 
 export default function PortfolioSection() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -102,9 +152,8 @@ export default function PortfolioSection() {
     loadPortfolio();
   }, []);
 
-  if (categories.length === 0) {
-    return <p className="text-center p-10">Loading portfolio...</p>;
-  }
+ if (categories.length === 0) return <PortfolioLoader />;
+
 
   const current = categories[activeIndex];
 

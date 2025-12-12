@@ -49,6 +49,56 @@ type PackageType = {
   items: PackageItem[];
 };
 
+/* -------------------------------------------------------
+   MULTI-ICON PHOTOGRAPHY LOADER FOR PRICES SECTION
+-------------------------------------------------------- */
+function PriceLoader() {
+  const messages = [
+    "Preparing your packages…",
+    "Optimizing your photoshoot options…",
+    "Framing the perfect price plan…",
+    "Curating your best deals…",
+    "Setting up your experience…",
+  ];
+
+  const icons = ["📸", "🎞️", "📷", "🎥"]; // rotating icons
+  const [msgIndex, setMsgIndex] = useState(0);
+  const [iconIndex, setIconIndex] = useState(0);
+
+  useEffect(() => {
+    const msgTimer = setInterval(() => {
+      setMsgIndex((prev) => (prev + 1) % messages.length);
+    }, 1500);
+
+    const iconTimer = setInterval(() => {
+      setIconIndex((prev) => (prev + 1) % icons.length);
+    }, 900); // faster icon animation
+
+    return () => {
+      clearInterval(msgTimer);
+      clearInterval(iconTimer);
+    };
+  }, []);
+
+  return (
+    <div className="flex flex-col items-center justify-center py-32 space-y-6">
+
+      {/* Animated Icon */}
+      <div
+        key={iconIndex}
+        className="text-6xl transition-all duration-500 transform animate-bounce"
+      >
+        {icons[iconIndex]}
+      </div>
+
+      {/* Changing Messages */}
+      <p className="text-lg text-gray-700 font-medium transition-opacity duration-500">
+        {messages[msgIndex]}
+      </p>
+    </div>
+  );
+}
+
 
 export default function PricesSection() {
   const [packages, setPackages] = useState<any[]>([]);
@@ -128,7 +178,7 @@ const handlePay = (price: string) => {
   }, [sheetData]);
 
   if (!merged.length)
-    return <p className="text-center p-10 text-xl">Loading...</p>;
+    return <PriceLoader />;
 
   const pkg = merged[activeIndex];
 

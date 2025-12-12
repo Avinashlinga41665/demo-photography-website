@@ -39,9 +39,60 @@ function FadeInSection({ children }: { children: ReactNode }) {
 }
 
 /* ----------------------------------------------------
+   MULTI-ICON FAQ PHOTOGRAPHY LOADER
+---------------------------------------------------- */
+function FAQLoader() {
+  const messages = [
+    "Preparing your questions…",
+    "Finding the perfect answers…",
+    "Framing helpful information…",
+    "Organizing your FAQs…",
+    "Loading commonly asked queries…",
+  ];
+
+  const icons = ["📸", "🎞️", "📷", "🎥"];
+  const [msgIndex, setMsgIndex] = useState(0);
+  const [iconIndex, setIconIndex] = useState(0);
+
+  useEffect(() => {
+    const msgTimer = setInterval(() => {
+      setMsgIndex((prev) => (prev + 1) % messages.length);
+    }, 1500);
+
+    const iconTimer = setInterval(() => {
+      setIconIndex((prev) => (prev + 1) % icons.length);
+    }, 900);
+
+    return () => {
+      clearInterval(msgTimer);
+      clearInterval(iconTimer);
+    };
+  }, []);
+
+  return (
+    <div className="flex flex-col items-center justify-center py-32 space-y-6">
+
+      {/* Animated Icon */}
+      <div
+        key={iconIndex}
+        className="text-6xl transition-all duration-500 transform animate-bounce"
+      >
+        {icons[iconIndex]}
+      </div>
+
+      {/* Changing messages */}
+      <p className="text-lg text-gray-700 font-medium transition-opacity duration-500">
+        {messages[msgIndex]}
+      </p>
+    </div>
+  );
+}
+
+
+/* ----------------------------------------------------
    MAIN FAQ COMPONENT
 ---------------------------------------------------- */
-export default function FAQAnimated() {
+export default function FAQSection() {
   const [faqList, setFaqList] = useState<any[]>([]);
   const [open, setOpen] = useState<number | null>(null);
 
@@ -92,9 +143,8 @@ export default function FAQAnimated() {
         {/* FAQ List */}
         <FadeInSection>
           <div className="bg-white rounded-2xl shadow-xl p-6 space-y-4">
-            {faqList.length === 0 && (
-              <p className="text-center text-gray-500">Loading...</p>
-            )}
+           {faqList.length === 0 && <FAQLoader />}
+
 
             {faqList.map((item, idx) => (
               <div key={item.id} className="border-b last:border-none">

@@ -12,7 +12,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <p className="text-sm text-gray-600">
-          © {new Date().getFullYear()} Photography Name. All rights reserved.
+          © {new Date().getFullYear()} Avinash Photography. All rights reserved.
         </p>
 
       </div>
